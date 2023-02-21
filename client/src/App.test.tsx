@@ -1,12 +1,13 @@
 import { describe, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
-import App from './App';
+import { App, WrappedApp } from './App';
 
 describe('App', () => {
-  it('Renders Hello World', () => {
+  it('Renders "Hello World"', () => {
     // ARRANGE
-    render(<App />);
+    render(<WrappedApp />);
     // ACT
     // EXPECT
     expect(
@@ -14,5 +15,18 @@ describe('App', () => {
         level: 1,
       })
     ).toHaveTextContent('Hello World');
+  });
+
+  it('Renders "Not Found" if invalid path', () => {
+    render(
+      <MemoryRouter initialEntries={['/potato']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+      })
+    ).toHaveTextContent('Not Found');
   });
 });
